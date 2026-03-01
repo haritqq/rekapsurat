@@ -20,34 +20,70 @@ $keluar = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_keluar WHE
     <style>
         .sidebar { min-height: 100vh; background: #343a40; color: white; }
         .sidebar a { color: #c2c7d0; text-decoration: none; padding: 10px 20px; display: block; }
-        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
+        .sidebar a:hover, .sidebar a.active { background-color: #565d65; color: white; }
         .content { padding: 20px; }
     </style>
 </head>
 <body>
 
 <div class="d-flex">
+    <?php 
+    $current_page = isset($_GET['page']) ? $_GET['page'] : 'dashboard'; 
+    $current_type = isset($_GET['type']) ? $_GET['type'] : 'izin';
+    ?>
+    
     <div class="sidebar col-md-2">
-        <h4 class="text-center py-3">E-Arsip</h4>
-        <hr>
-        <a href="index.php"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
-        <a href="index.php?page=surat_masuk"><i class="fas fa-inbox me-2"></i> Surat Masuk</a>
-        <a href="#skeluarSubmenu" data-bs-toggle="collapse" class="dropdown-toggle"><i class="fas fa-paper-plane me-2"></i> Surat Keluar</a>
-        <div class="collapse" id="skeluarSubmenu">
-            <a href="index.php?page=surat_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> Izin Testing</a>
-            <a href="index.php?page=surat_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> Tugas Belajar</a>
-            <a href="index.php?page=surat_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> SKMI</a>
-            <a href="index.php?page=surat_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> SKMTA</a>
-            <a href="index.php?page=surat_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> SKTTB</a>
-        </div>
-        
-        <a href="#refSubmenu" data-bs-toggle="collapse" class="dropdown-toggle"><i class="fas fa-book me-2"></i> Referensi</a>
-        <div class="collapse" id="refSubmenu">
-            <a href="index.php?page=ref_masuk" class="ps-5"><i class="fas fa-angle-right me-2"></i> Kode Surat Masuk</a>
-            <a href="index.php?page=ref_keluar" class="ps-5"><i class="fas fa-angle-right me-2"></i> Kode Surat Keluar</a>
-        </div>
+    <h4 class="text-center py-3">E-Arsip</h4>
+    <hr>
+    
+    <a href="index.php" class="<?= ($current_page == 'dashboard') ? 'active' : ''; ?>">
+        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+    </a>
 
-        <a href="index.php?page=laporan"><i class="fas fa-print me-2"></i> Laporan</a>
+    <a href="index.php?page=surat_masuk" class="<?= ($current_page == 'surat_masuk') ? 'active' : ''; ?>">
+        <i class="fas fa-inbox me-2"></i> Surat Masuk
+    </a>
+
+    <a href="#skeluarSubmenu" data-bs-toggle="collapse" 
+       class="dropdown-toggle <?= ($current_page == 'surat_keluar') ? 'active' : ''; ?>" 
+       aria-expanded="<?= ($current_page == 'surat_keluar') ? 'true' : 'false'; ?>">
+        <i class="fas fa-paper-plane me-2"></i> Surat Keluar
+    </a>
+    <div class="collapse <?= ($current_page == 'surat_keluar') ? 'show' : ''; ?>" id="skeluarSubmenu" data-bs-parent=".sidebar">
+        <a href="index.php?page=izin_testing" class="ps-5 <?= ($current_type == 'izin_testing') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> Izin Testing
+        </a>
+        <a href="index.php?page=surat_keluar&type=tugas_belajar" class="ps-5 <?= ($current_type == 'tugas_belajar') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> Tugas Belajar
+        </a>
+        <a href="index.php?page=surat_keluar&type=skmi" class="ps-5 <?= ($current_type == 'skmi') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> SKMI
+        </a>
+        <a href="index.php?page=surat_keluar&type=skmta" class="ps-5 <?= ($current_type == 'skmta') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> SKMTA
+        </a>
+        <a href="index.php?page=surat_keluar&type=skttb" class="ps-5 <?= ($current_type == 'skttb') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> SKTTB
+        </a>
+    </div>
+    
+    <a href="#refSubmenu" data-bs-toggle="collapse" 
+       class="dropdown-toggle <?= (strpos($current_page, 'ref_') !== false) ? 'active' : ''; ?>">
+        <i class="fas fa-book me-2"></i> Referensi
+    </a>
+    <div class="collapse <?= (strpos($current_page, 'ref_') !== false) ? 'show' : ''; ?>" id="refSubmenu" data-bs-parent=".sidebar">
+        <a href="index.php?page=ref_masuk" class="ps-5 <?= ($current_page == 'ref_masuk') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> Kode Surat Masuk
+        </a>
+        <a href="index.php?page=ref_keluar" class="ps-5 <?= ($current_page == 'ref_keluar') ? 'active' : ''; ?>">
+            <i class="fas fa-angle-right me-2"></i> Kode Surat Keluar
+        </a>
+    </div>
+
+    <a href="index.php?page=laporan" class="<?= ($current_page == 'laporan') ? 'active' : ''; ?>">
+        <i class="fas fa-print me-2"></i> Laporan
+    </a>
+
         <a href="logout.php" class="text-danger mt-5"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
     </div>
 
@@ -89,5 +125,25 @@ $keluar = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_keluar WHE
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var myCollapsibles = document.querySelectorAll('.sidebar .collapse');
+    
+    myCollapsibles.forEach(function(collapse) {
+        collapse.addEventListener('show.bs.collapse', function () {
+            // Tutup semua collapse lain yang sedang terbuka
+            myCollapsibles.forEach(function(otherCollapse) {
+                if (otherCollapse !== collapse) {
+                    var bsCollapse = bootstrap.Collapse.getInstance(otherCollapse);
+                    if (bsCollapse) {
+                        bsCollapse.hide();
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>

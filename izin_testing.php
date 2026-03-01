@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between">
-        <h5>Kode Surat Masuk</h5>
+        <h5>Izin Testing</h5>
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi</button>
     </div>
     <div class="card-body">
