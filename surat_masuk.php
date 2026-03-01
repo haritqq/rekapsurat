@@ -15,12 +15,11 @@
                         <th>No</th>
                         <th>No Surat</th>
                         <th>No Agenda</th>
-                        <th>Tgl Terima</th>
-                        <th>Pengirim</th>
+                        <th>Diterima</th>
+                        <th>Pengirim / Instansi</th>
                         <th>Perihal</th>
-                        <th>Penanggung Jawab</th>
-                        <th>Tgl Masuk Bidang</th>
-                        <th>Diteruskan Kepada</th>
+                        <th>Masuk Bidang</th>                        
+                        <th>Diteruskan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -49,8 +48,7 @@
                         <td><?= $data['tgl_terima']; ?></td>
                         <td><?= $data['pengirim']; ?></td>
                         <td><?= $data['perihal']; ?></td>
-                        <td><?= $data['penaggung_jwb'] ?? '-'; ?></td>
-                        <td><?= $data['masuk_ke'] ?? '-'; ?></td>
+                        <td><?= $data['tgl_msk_bidang'] ?? '-'; ?></td>
                         <td>
                             <?php if(!empty($data['no_wa'])): ?>
                             <a href="<?= $linkWA; ?>" target="_blank" class="btn btn-success btn-sm mb-1" title="Teruskan via WA">
@@ -80,10 +78,11 @@
             <form method="POST" action="proses_surat.php?act=tambah_masuk">
             <div class="modal-body">
                 <div class="mb-2"><label>No Surat</label><input type="text" name="no_surat" class="form-control" required></div>
-                <div class="mb-2"><label>Tgl Surat</label><input type="date" name="tgl_surat" class="form-control" required></div>
+                <div class="mb-2"><label>No Agenda</label><input type="text" name="no_agenda" class="form-control" required></div>
                 <div class="mb-2"><label>Tgl Terima</label><input type="date" name="tgl_terima" class="form-control" required></div>
                 <div class="mb-2"><label>Pengirim</label><input type="text" name="pengirim" class="form-control" required></div>
                 <div class="mb-2"><label>Perihal</label><textarea name="perihal" class="form-control" required></textarea></div>
+                <div class="mb-2"><label>Tgl Masuk Bidang</label><input type="date" name="tgl_msk_bidang" class="form-control" required></div>
                 <hr>
                 <h6>Disposisi & Teruskan</h6>
                 <div class="mb-2">

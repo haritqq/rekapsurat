@@ -12,16 +12,17 @@ if (isset($_GET['act'])) {
     // TAMBAH SURAT MASUK
     if ($act == 'tambah_masuk') {
         $no = $_POST['no_surat'];
-        $tgl_s = $_POST['tgl_surat'];
+        $no_agen = $_POST['no_agenda'];
         $tgl_t = $_POST['tgl_terima'];
         $pengirim = $_POST['pengirim'];
         $perihal = $_POST['perihal'];
+        $tgl_s = $_POST['tgl_msk_bidang'];
         $diteruskan = $_POST['diteruskan_kepada'];
         $no_wa = $_POST['no_wa'];
 
         // Disarankan menyebutkan nama kolom spesifik agar terhindar dari error "Column count doesn't match"
-        $query = "INSERT INTO surat_masuk (no_surat, tgl_surat, tgl_terima, pengirim, perihal, diteruskan_kepada, no_wa) 
-                  VALUES ('$no', '$tgl_s', '$tgl_t', '$pengirim', '$perihal', '$diteruskan', '$no_wa')";
+        $query = "INSERT INTO surat_masuk (no_surat, no_agenda, tgl_terima, pengirim, perihal, tgl_msk_bidang, diteruskan_kepada, no_wa) 
+                  VALUES ('$no', '$no_agen', '$tgl_t', '$pengirim', '$perihal', '$tgl_s', '$diteruskan', '$no_wa')";
         
         mysqli_query($koneksi, $query);
         header("location:index.php?page=surat_masuk");
