@@ -53,7 +53,7 @@ $keluar = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_keluar WHE
         <a href="index.php?page=izin_testing" class="ps-5 <?= ($current_type == 'izin_testing') ? 'active' : ''; ?>">
             <i class="fas fa-angle-right me-2"></i> Izin Testing
         </a>
-        <a href="index.php?page=surat_keluar&type=tugas_belajar" class="ps-5 <?= ($current_type == 'tugas_belajar') ? 'active' : ''; ?>">
+        <a href="index.php?page=tugas_belajar" class="ps-5 <?= ($current_type == 'tugas_belajar') ? 'active' : ''; ?>">
             <i class="fas fa-angle-right me-2"></i> Tugas Belajar
         </a>
         <a href="index.php?page=surat_keluar&type=skmi" class="ps-5 <?= ($current_type == 'skmi') ? 'active' : ''; ?>">
