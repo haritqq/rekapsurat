@@ -32,26 +32,28 @@ if (isset($_GET['act'])) {
     elseif ($act == 'edit_masuk') {
         $id = $_POST['id'];
         $no = $_POST['no_surat'];
-        $tgl_s = $_POST['tgl_surat'];
+        $no_agen = $_POST['no_agenda'];
         $tgl_t = $_POST['tgl_terima'];
         $pengirim = $_POST['pengirim'];
         $perihal = $_POST['perihal'];
+        $tgl_s = $_POST['tgl_msk_bidang'];
         $diteruskan = $_POST['diteruskan_kepada'];
         $no_wa = $_POST['no_wa'];
 
         $query = "UPDATE surat_masuk SET 
                     no_surat = '$no', 
-                    tgl_surat = '$tgl_s', 
+                    no_agenda = '$no_agen', 
                     tgl_terima = '$tgl_t', 
                     pengirim = '$pengirim', 
                     perihal = '$perihal', 
+                    tgl_msk_bidang = '$tgl_s',
                     diteruskan_kepada = '$diteruskan', 
                     no_wa = '$no_wa' 
-                  WHERE id = '$id'";
+                WHERE id = '$id'";
 
         mysqli_query($koneksi, $query);
         header("location:index.php?page=surat_masuk");
-    }
+        }
 
     // HAPUS SURAT MASUK
     elseif ($act == 'hapus_masuk') {
