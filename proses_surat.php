@@ -124,6 +124,12 @@ if (isset($_GET['act'])) {
                                 VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
         header("location:index.php?page=izin_testing");
     }    
+    // HAPUS
+    elseif ($act == 'hapus_izin') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM izin_testing WHERE id = '$id'");
+        header("location:index.php?page=izin_testing");
+    }
 
     
     // TAMBAH SURAT KELUAR

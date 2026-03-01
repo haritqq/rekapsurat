@@ -39,7 +39,7 @@
                     <td><?= $data['ttd']?? '-';; ?></td>
                     <td>
                         <a href="index.php?page=edit_surat_masuk&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a> <br>
-                        <a href="hapus.php?type=masuk&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
+                        <a href="proses_surat.php?act=hapus_izin&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
                 <?php } ?>
