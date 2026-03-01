@@ -110,6 +110,21 @@ if (isset($_GET['act'])) {
     // ====================================================
     // 3. CRUD SURAT KELUAR (Sebagai Pelengkap)
     // ====================================================
+    // TAMBAH SURAT KELUAR
+    elseif ($act == 'tambah_izin') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        mysqli_query($koneksi, "INSERT INTO izin_testing (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
+        header("location:index.php?page=izin_testing");
+    }    
+
     
     // TAMBAH SURAT KELUAR
     elseif ($act == 'tambah_keluar') {

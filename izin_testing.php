@@ -4,38 +4,42 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between">
-        <h5>Izin Testing</h5>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi</button>
+        <h5>Table Izin Testing</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Izin Testing</button>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">
-            <thead>
+            <thead style="text-align: center; vertical-align: middle">
                 <tr>
                     <th>No</th>
-                    <th>Kode Surat</th>
-                    <th>Nama Instansi</th>
-                    <th>Perihal</th>
-                    <th>Tujuan</th>
-                    <th>Ditunjukan</th>
+                    <th>Nama</th>
+                    <th>NIP</th>
+                    <th>Pangkat / Gol</th>
+                    <th>Instansi</th>
+                    <th>No. SK</th>
+                    <th>Lembaga</th>
+                    <th>Penanda Tangan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $no = 1;
-                $query = mysqli_query($koneksi, "SELECT * FROM ref_masuk ORDER BY id DESC");
+                $query = mysqli_query($koneksi, "SELECT * FROM izin_testing ORDER BY id DESC");
                 while($data = mysqli_fetch_array($query)){
                 ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><?= $data['kode_masuk']?? '-';; ?></td>
-                    <td><?= $data['nama_instansi']?? '-';; ?></td>
-                    <td><?= $data['perihal']?? '-';; ?></td>
-                    <td><?= $data['tujuan']?? '-';; ?></td>
-                    <td><?= $data['ditujukan']?? '-';; ?></td>
+                    <td><?= $data['nama']?? '-';; ?></td>
+                    <td><?= $data['nip']?? '-';; ?></td>
+                    <td><?= $data['pangkat_gol']?? '-';; ?></td>
+                    <td><?= $data['asal_instansi']?? '-';; ?></td>
+                    <td><?= $data['no_sk']?? '-';; ?></td>
+                    <td><?= $data['lembaga']?? '-';; ?></td>
+                    <td><?= $data['ttd']?? '-';; ?></td>
                     <td>
-                        <a href="index.php?page=edit_surat_masuk&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="hapus.php?type=masuk&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</a>
+                        <a href="index.php?page=edit_surat_masuk&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a> <br>
+                        <a href="hapus.php?type=masuk&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
                 <?php } ?>
@@ -48,16 +52,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Referensi Surat Masuk</h5>
+                <h5 class="modal-title">Tambah Izin Testing</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="proses_surat.php?act=tambah_ref_masuk">
+            <form method="POST" action="proses_surat.php?act=tambah_izin">
             <div class="modal-body">              
-                <div class="mb-2"><label>Kode Surat</label><input type="text" name="kode_surat" class="form-control" required></div>
-                <div class="mb-2"><label>Nama Instansi</label><input type="text" name="nama_instansi" class="form-control" required></div>
-                <div class="mb-2"><label>Perihal</label><input type="text" name="perihal" class="form-control" required></div>
-                <div class="mb-2"><label>Tujuan</label><input type="text" name="tujuan" class="form-control" required></div>
-                <div class="mb-2"><label>Ditunjukan</label><input type="text" name="ditunjukan" class="form-control" required></div>
+                <div class="mb-2"><label>Nama</label><input type="text" name="nama" class="form-control" required></div>
+                <div class="mb-2"><label>NIP</label><input type="text" name="nip" class="form-control" required></div>
+                <div class="mb-2"><label>Pangkat/Gol</label><input type="text" name="pangkat" class="form-control" required></div>
+                <div class="mb-2"><label>Asal Instansi</label><input type="text" name="instansi" class="form-control" required></div>
+                <div class="mb-2"><label>No SK</label><input type="text" name="sk" class="form-control" required></div>
+                <div class="mb-2"><label>Lembaga</label><input type="text" name="lembaga" class="form-control" required></div>
+                <div class="mb-2"><label>Penanda Tangan</label><input type="text" name="tandatangan" class="form-control" required></div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
