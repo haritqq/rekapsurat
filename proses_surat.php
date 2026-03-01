@@ -5,10 +5,7 @@ include 'koneksi.php';
 if (isset($_GET['act'])) {
     $act = $_GET['act'];
 
-    // ====================================================
-    // 1. CRUD SURAT MASUK (Termasuk Diteruskan & WA)
-    // ====================================================
-    
+// ==================================================== SURAT MASUK
     // TAMBAH SURAT MASUK
     if ($act == 'tambah_masuk') {
         $no = $_POST['no_surat'];
@@ -63,8 +60,107 @@ if (isset($_GET['act'])) {
     }
 
 
+
+// ==================================================== IZIN TESTING
+    // TAMBAH IZIN
+    elseif ($act == 'tambah_izin') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        mysqli_query($koneksi, "INSERT INTO izin_testing (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
+        header("location:index.php?page=izin_testing");
+    }
+    // EDIT IZIN
+    elseif ($act == '') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat_gol'];
+        $instansi = $_POST['asal_instansi'];
+        $sk = $_POST['no_sk'];
+        $lembaga = $_POST['lembaga'];
+        $ttd = $_POST['ttd'];
+
+        $query = "UPDATE tugas_bel SET 
+                    nama = '$nama', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat', 
+                    asal_instansi = '$instansi', 
+                    no_sk = '$sk', 
+                    lembaga = '$lembaga',
+                    ttd = '$ttd'
+                WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=tugas_belajar");
+        }
+
+    // HAPUS IZIN
+    elseif ($act == 'hapus_izin') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM izin_testing WHERE id = '$id'");
+        header("location:index.php?page=izin_testing");
+    }
+
+// ==================================================== TUGAS BELAJAR
+    // TAMBAH TUGAS BELAJAR
+    elseif ($act == 'tambah_tgs_bel') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        mysqli_query($koneksi, "INSERT INTO tugas_bel (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
+        header("location:index.php?page=tugas_belajar");
+    }
+    // EDIT TUGAS BELAJAR
+    elseif ($act == 'edit_tgs_bel') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        $query = "UPDATE tugas_bel SET 
+                    nama = '$nama', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat', 
+                    asal_instansi = '$instansi', 
+                    no_sk = '$sk', 
+                    lembaga = '$lembaga',
+                    ttd = '$tandatangan'
+                WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=tugas_belajar");
+        }
+
+        // HAPUS TUGAS BELAJAR
+    elseif ($act == 'hapus_tugas') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM tugas_bel WHERE id = '$id'");
+        header("location:index.php?page=tugas_belajar");
+    }
+
+
+
+        
+    
     // ====================================================
-    // 2. CRUD REFERENSI SURAT MASUK
+    // 3. CRUD REFERENSI SURAT MASUK
     // ====================================================
     
     // TAMBAH REF MASUK
@@ -108,63 +204,5 @@ if (isset($_GET['act'])) {
         header("location:index.php?page=ref_masuk");
     }
 
-
-    // ====================================================
-    // 3. CRUD SURAT KELUAR (Sebagai Pelengkap)
-    // ====================================================
-    // TAMBAH SURAT KELUAR
-    elseif ($act == 'tambah_izin') {
-        $nama = $_POST['nama'];
-        $nip = $_POST['nip'];
-        $pangkat = $_POST['pangkat'];
-        $instansi = $_POST['instansi'];
-        $sk = $_POST['sk'];
-        $lembaga = $_POST['lembaga'];
-        $tandatangan = $_POST['tandatangan'];
-
-        mysqli_query($koneksi, "INSERT INTO izin_testing (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
-                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
-        header("location:index.php?page=izin_testing");
-    }    
-    // HAPUS
-    elseif ($act == 'hapus_izin') {
-        $id = $_GET['id'];
-        mysqli_query($koneksi, "DELETE FROM izin_testing WHERE id = '$id'");
-        header("location:index.php?page=izin_testing");
-    }
-
-    
-    // TAMBAH SURAT KELUAR
-    elseif ($act == 'tambah_keluar') {
-        $no_surat = $_POST['no_surat'];
-        $tgl_surat = $_POST['tgl_surat'];
-        $tujuan = $_POST['tujuan'];
-        $perihal = $_POST['perihal'];
-
-        mysqli_query($koneksi, "INSERT INTO surat_keluar (no_surat, tgl_surat, tujuan, perihal) 
-                                VALUES ('$no_surat', '$tgl_surat', '$tujuan', '$perihal')");
-        header("location:index.php?page=surat_keluar");
-    }
-
-    // EDIT SURAT KELUAR
-    elseif ($act == 'edit_keluar') {
-        $id = $_POST['id'];
-        $no_surat = $_POST['no_surat'];
-        $tgl_surat = $_POST['tgl_surat'];
-        $tujuan = $_POST['tujuan'];
-        $perihal = $_POST['perihal'];
-
-        mysqli_query($koneksi, "UPDATE surat_keluar SET 
-                                no_surat='$no_surat', tgl_surat='$tgl_surat', tujuan='$tujuan', perihal='$perihal' 
-                                WHERE id='$id'");
-        header("location:index.php?page=surat_keluar");
-    }
-
-    // HAPUS SURAT KELUAR
-    elseif ($act == 'hapus_keluar') {
-        $id = $_GET['id'];
-        mysqli_query($koneksi, "DELETE FROM surat_keluar WHERE id = '$id'");
-        header("location:index.php?page=surat_keluar");
-    }
 }
 ?>

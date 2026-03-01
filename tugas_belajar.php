@@ -39,8 +39,8 @@
                     <td><?= $data['lembaga']?? '-';; ?></td>
                     <td><?= $data['ttd']?? '-';; ?></td>
                     <td>
-                        <a href="index.php?page=edit_surat_masuk&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a> <br>
-                        <a href="proses_surat.php?act=hapus_izin&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
+                        <button class="btn btn-warning btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $data['id']; ?>"><i class="fas fa-edit"></i></button>
+                        <a href="proses_surat.php?act=hapus_tugas&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
 
@@ -48,28 +48,40 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Surat Masuk</h5>
+                                <h5 class="modal-title">Edit Tugas Belajar</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form method="POST" action="proses_surat.php?act=edit_masuk">
+                            <form method="POST" action="proses_surat.php?act=edit_tgs_bel">
                             <div class="modal-body">
                                 <input type="hidden" name="id" value="<?= $data['id']; ?>">
-                                <div class="mb-2"><label>No Surat</label><input type="text" name="no_surat" class="form-control" value="<?= $data['no_surat']; ?>" required></div>
-                                <div class="mb-2"><label>No Agenda</label><input type="text" name="no_agenda" class="form-control" value="<?= $data['no_agenda']; ?>" required></div>
-                                <div class="mb-2"><label>Tgl Terima</label><input type="date" name="tgl_terima" class="form-control" value="<?= $data['tgl_terima']; ?>" required></div>
-                                <div class="mb-2"><label>Pengirim</label><input type="text" name="pengirim" class="form-control" value="<?= $data['pengirim']; ?>" required></div>
-                                <div class="mb-2"><label>Perihal</label><textarea name="perihal" class="form-control" required><?= $data['perihal']; ?></textarea></div>
-                                <div class="mb-2"><label>Tgl Masuk Bidang</label><input type="date" name="tgl_msk_bidang" class="form-control" value="<?= $data['tgl_msk_bidang']; ?>" required></div>
-                                <hr>
-                                <h6>Disposisi & Teruskan</h6>
-                                <div class="mb-2">
-                                    <label>Diteruskan Kepada</label>
-                                    <input type="text" name="diteruskan_kepada" class="form-control" value="<?= $data['diteruskan_kepada']; ?>">
-                                </div>
-                                <div class="mb-2">
-                                    <label>Nomor WhatsApp</label>
-                                    <input type="number" name="no_wa" class="form-control" value="<?= $data['no_wa']; ?>">
-                                </div>
+                                    <div class="mb-2">
+                                        <label>Nama</label>
+                                        <input type="text" name="nama" class="form-control" value="<?= $data['nama']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>NIP</label>
+                                        <input type="text" name="nip" class="form-control" value="<?= $data['nip']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Pangkat / Gol</label>
+                                        <input type="text" name="pangkat" class="form-control" value="<?= $data['pangkat_gol']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Asal Instansi</label>
+                                        <input type="text" name="instansi" class="form-control" value="<?= $data['asal_instansi']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>No SK</label>
+                                        <input type="text" name="sk" class="form-control" value="<?= $data['no_sk']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Lembaga</label>
+                                        <input type="text" name="lembaga" class="form-control" value="<?= $data['lembaga']; ?>" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Penanda Tangan</label>
+                                        <input type="text" name="tandatangan" class="form-control" value="<?= $data['ttd']; ?>">
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Update</button>
@@ -89,28 +101,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Surat Masuk</h5>
+                <h5 class="modal-title">Tambah Tugas Belajar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="proses_surat.php?act=tambah_masuk">
+            <form method="POST" action="proses_surat.php?act=tambah_tgs_bel">
             <div class="modal-body">
-                <div class="mb-2"><label>No Surat</label><input type="text" name="no_surat" class="form-control" required></div>
-                <div class="mb-2"><label>No Agenda</label><input type="text" name="no_agenda" class="form-control" required></div>
-                <div class="mb-2"><label>Tgl Terima</label><input type="date" name="tgl_terima" class="form-control" required></div>
-                <div class="mb-2"><label>Pengirim</label><input type="text" name="pengirim" class="form-control" required></div>
-                <div class="mb-2"><label>Perihal</label><textarea name="perihal" class="form-control" required></textarea></div>
-                <div class="mb-2"><label>Tgl Masuk Bidang</label><input type="date" name="tgl_msk_bidang" class="form-control" required></div>
-                <hr>
-                <h6>Disposisi & Teruskan</h6>
-                <div class="mb-2">
-                    <label>Diteruskan Kepada (Nama Pegawai)</label>
-                    <input type="text" name="diteruskan_kepada" class="form-control" placeholder="Opsional">
-                </div>
-                <div class="mb-2">
-                    <label>Nomor WhatsApp</label>
-                    <input type="number" name="no_wa" class="form-control" placeholder="Contoh: 628123456789">
-                    <small class="text-danger">*Awali dengan angka 62 (Kode Negara) agar link berfungsi</small>
-                </div>
+                <div class="mb-2"><label>Nama</label><input type="text" name="nama" class="form-control" required></div>
+                <div class="mb-2"><label>NIP</label><input type="text" name="nip" class="form-control" required></div>
+                <div class="mb-2"><label>Pangkat / Gol</label><input type="text" name="pangkat" class="form-control" required></div>
+                <div class="mb-2"><label>Instansi</label><input type="text" name="instansi" class="form-control" required></div>
+                <div class="mb-2"><label>No. SK</label><input type="text" name="sk" class="form-control" required></div>
+                <div class="mb-2"><label>Lembaga</label><input type="text" name="lembaga" class="form-control" required></div>
+                <div class="mb-2"><label>Penanda Tangan</label><input type="text" name="tandatangan" class="form-control"></div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
