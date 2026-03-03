@@ -303,15 +303,15 @@ if (isset($_GET['act'])) {
     // 3. CRUD REFERENSI SURAT MASUK
     // ====================================================
     
-    // TAMBAH REF MASUK
+    // TAMBAH REF MASUK ===================================
     elseif ($act == 'tambah_ref_masuk') {
-        $kode = $_POST['kode_surat'];
+        $kode = $_POST['kode_masuk'];
         $nama_i = $_POST['nama_instansi'];
         $perihal = $_POST['perihal'];
         $tujuan = $_POST['tujuan'];
-        $ditunjuk = $_POST['ditunjukan'];
+        $ditunjuk = $_POST['ditujukan'];
 
-        mysqli_query($koneksi, "INSERT INTO ref_masuk (kode_surat, nama_instansi, perihal, tujuan, ditunjukan) 
+        mysqli_query($koneksi, "INSERT INTO ref_masuk (kode_masuk, nama_instansi, perihal, tujuan, ditujukan) 
                   VALUES ('$kode', '$nama_i', '$perihal', '$tujuan', '$ditunjuk')");
         header("location:index.php?page=ref_masuk");
     }
@@ -319,18 +319,18 @@ if (isset($_GET['act'])) {
     // EDIT REF MASUK
     elseif ($act == 'edit_ref_masuk') {
         $id = $_POST['id'];
-        $kode = $_POST['kode_surat'];
+        $kode_masuk = $_POST['kode_masuk'];
         $nama_i = $_POST['nama_instansi'];
         $perihal = $_POST['perihal'];
         $tujuan = $_POST['tujuan'];
-        $ditunjuk = $_POST['ditunjukan'];
+        $ditunjuk = $_POST['ditujukan'];
 
         $query = "UPDATE ref_masuk SET 
-                    kode_surat = '$kode', 
+                    kode_masuk = '$kode_masuk', 
                     nama_instansi = '$nama_i', 
                     perihal = '$perihal', 
                     tujuan = '$tujuan', 
-                    ditunjukan = '$ditunjuk' 
+                    ditujukan = '$ditunjuk' 
                   WHERE id = '$id'";
 
         mysqli_query($koneksi, $query);
@@ -343,6 +343,46 @@ if (isset($_GET['act'])) {
         mysqli_query($koneksi, "DELETE FROM ref_masuk WHERE id = '$id'");
         header("location:index.php?page=ref_masuk");
     }
+
+
+        // TAMBAH REF KELUAR ===================================
+    elseif ($act == 'tambah_ref_keluar') {
+        $no_surat = $_POST['no_surat'];
+        $tujuan = $_POST['tujuan'];
+        $instansi = $_POST['instansi'];
+        $pengirim = $_POST['pengirim'];
+
+        mysqli_query($koneksi, "INSERT INTO ref_keluar (no_surat, tujuan, instansi, pengirim) 
+                  VALUES ('$no_surat', '$tujuan' '$instansi', '$pengirim')");
+        header("location:index.php?page=ref_keluar");
+    }
+
+    // EDIT REF KELUAR
+    elseif ($act == 'edit_ref_keluar') {
+        $id = $_POST['id'];
+        $no_surat = $_POST['no_surat'];
+        $tujuan = $_POST['tujuan'];
+        $instansi = $_POST['instansi'];
+        $pengirim = $_POST['pengirim'];
+
+        $query = "UPDATE ref_keluar SET 
+                    no_surat = '$no_surat', 
+                    tujuan = '$tujuan', 
+                    instansi = '$instansi', 
+                    pengirim = '$pengirim' 
+                  WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=ref_keluar");
+    }
+
+    // HAPUS REF KELUAR
+    elseif ($act == 'hapus_ref_keluar') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM ref_keluar WHERE id = '$id'");
+        header("location:index.php?page=ref_keluar");
+    }
+
 
 }
 ?>
