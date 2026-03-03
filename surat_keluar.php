@@ -27,7 +27,7 @@
                 <tbody>
                     <?php
                     $no = 1;
-                    $query = mysqli_query($koneksi, "SELECT * FROM surat_masuk ORDER BY id DESC");
+                    $query = mysqli_query($koneksi, "SELECT * FROM surat_keluar ORDER BY id DESC");
                     while($data = mysqli_fetch_array($query)){
                         
                         // Membuat format pesan WhatsApp secara dinamis
@@ -59,8 +59,8 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="index.php?page=edit_surat_masuk&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm mb-1"><i class="fas fa-edit"></i></a>
-                            <a href="proses_surat.php?act=hapus_masuk&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
+                            <a href="index.php?page=edit_ref_keluark&id=<?= $data['id']; ?>" class="btn btn-warning btn-sm mb-1"><i class="fas fa-edit"></i></a>
+                            <a href="proses_surat.php?act=hapus_ref_keluark&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                     <?php } ?>
