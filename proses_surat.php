@@ -74,7 +74,7 @@ if (isset($_GET['act'])) {
 
         mysqli_query($koneksi, "INSERT INTO izin_testing (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
                                 VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
-        header("location:index.php?page=tugas_belajar");
+        header("location:index.php?page=izin_testing");
     }
     // EDIT IZIN TESTING
     elseif ($act == 'edit_izin_testing') {

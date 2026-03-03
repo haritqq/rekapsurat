@@ -10,7 +10,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
-                <thead>
+                <thead style="text-align: center; vertical-align: middle;"> 
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
@@ -38,8 +38,8 @@
                     <td><?= $data['no_sk']?? '-';; ?></td>
                     <td><?= $data['lembaga']?? '-';; ?></td>
                     <td><?= $data['ttd']?? '-';; ?></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $data['id']; ?>"><i class="fas fa-edit"></i></button>
+                    <td class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $data['id']; ?>"><i class="fas fa-edit"></i></button>
                         <a href="proses_surat.php?act=hapus_skmi&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
