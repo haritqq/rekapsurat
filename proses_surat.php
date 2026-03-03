@@ -61,9 +61,9 @@ if (isset($_GET['act'])) {
 
 
 
-// ========================= IZIN TESTING ===========================
-    // TAMBAH IZIN
-    elseif ($act == 'tambah_izin') {
+// ==================================================== IZIN TESTING
+    // TAMBAH IZIN TESTING
+    elseif ($act == 'tambah_izin_testing') {
         $nama = $_POST['nama'];
         $nip = $_POST['nip'];
         $pangkat = $_POST['pangkat'];
@@ -74,39 +74,41 @@ if (isset($_GET['act'])) {
 
         mysqli_query($koneksi, "INSERT INTO izin_testing (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
                                 VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
-        header("location:index.php?page=izin_testing");
+        header("location:index.php?page=tugas_belajar");
     }
-    // EDIT IZIN
-    elseif ($act == 'edit_izin') {
+    // EDIT IZIN TESTING
+    elseif ($act == 'edit_izin_testing') {
         $id = $_POST['id'];
         $nama = $_POST['nama'];
         $nip = $_POST['nip'];
-        $pangkat = $_POST['pangkat_gol'];
-        $instansi = $_POST['asal_instansi'];
-        $sk = $_POST['no_sk'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
         $lembaga = $_POST['lembaga'];
-        $ttd = $_POST['ttd'];
+        $tandatangan = $_POST['tandatangan'];
 
-        $query = "UPDATE tugas_bel SET 
+        $query = "UPDATE izin_testing SET 
                     nama = '$nama', 
                     nip = '$nip', 
                     pangkat_gol = '$pangkat', 
                     asal_instansi = '$instansi', 
                     no_sk = '$sk', 
                     lembaga = '$lembaga',
-                    ttd = '$ttd'
+                    ttd = '$tandatangan'
                 WHERE id = '$id'";
 
         mysqli_query($koneksi, $query);
         header("location:index.php?page=izin_testing");
         }
 
-    // HAPUS IZIN
-    elseif ($act == 'hapus_izin') {
+        // HAPUS IZIN TESTING
+    elseif ($act == 'hapus_izin_testing') {
         $id = $_GET['id'];
         mysqli_query($koneksi, "DELETE FROM izin_testing WHERE id = '$id'");
         header("location:index.php?page=izin_testing");
     }
+
+
 
 // ==================================================== TUGAS BELAJAR
     // TAMBAH TUGAS BELAJAR

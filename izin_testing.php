@@ -1,15 +1,16 @@
     <header class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 shadow-sm rounded">
         <h4 class="mb-0">Surat Keluar</h4><div><span>Halo, Admin!</span></div>
     </header>
-
+    
 <div class="card">
     <div class="card-header d-flex justify-content-between">
-        <h5>Table Izin Testing</h5>
+        <h5>Table IZIN TESTING</h5>
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Izin Testing</button>
     </div>
     <div class="card-body">
-        <table class="table table-bordered table-striped">
-            <thead style="text-align: center; vertical-align: middle">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
@@ -21,8 +22,8 @@
                     <th>Penanda Tangan</th>
                     <th>Aksi</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <?php
                 $no = 1;
                 $query = mysqli_query($koneksi, "SELECT * FROM izin_testing ORDER BY id DESC");
@@ -39,18 +40,18 @@
                     <td><?= $data['ttd']?? '-';; ?></td>
                     <td>
                         <button class="btn btn-warning btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $data['id']; ?>"><i class="fas fa-edit"></i></button>
-                        <a href="proses_surat.php?act=hapus_izin&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
+                        <a href="proses_surat.php?act=hapus_izin_testing&id=<?= $data['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
-                
+
                 <div class="modal fade" id="modalEdit<?= $data['id']; ?>" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Surat Izin</h5>
+                                <h5 class="modal-title">Edit Tugas Belajar</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form method="POST" action="proses_surat.php?act=edit_izin">
+                            <form method="POST" action="proses_surat.php?act=edit_izin_testing">
                             <div class="modal-body">
                                 <input type="hidden" name="id" value="<?= $data['id']; ?>">
                                     <div class="mb-2">
@@ -91,7 +92,8 @@
                 </div>
                 <?php } ?>
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -99,18 +101,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Izin Testing</h5>
+                <h5 class="modal-title">Tambah Tugas Belajar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="proses_surat.php?act=tambah_izin">
-            <div class="modal-body">              
+            <form method="POST" action="proses_surat.php?act=tambah_izin_testing">
+            <div class="modal-body">
                 <div class="mb-2"><label>Nama</label><input type="text" name="nama" class="form-control" required></div>
                 <div class="mb-2"><label>NIP</label><input type="text" name="nip" class="form-control" required></div>
-                <div class="mb-2"><label>Pangkat/Gol</label><input type="text" name="pangkat" class="form-control" required></div>
-                <div class="mb-2"><label>Asal Instansi</label><input type="text" name="instansi" class="form-control" required></div>
-                <div class="mb-2"><label>No SK</label><input type="text" name="sk" class="form-control" required></div>
+                <div class="mb-2"><label>Pangkat / Gol</label><input type="text" name="pangkat" class="form-control" required></div>
+                <div class="mb-2"><label>Instansi</label><input type="text" name="instansi" class="form-control" required></div>
+                <div class="mb-2"><label>No. SK</label><input type="text" name="sk" class="form-control" required></div>
                 <div class="mb-2"><label>Lembaga</label><input type="text" name="lembaga" class="form-control" required></div>
-                <div class="mb-2"><label>Penanda Tangan</label><input type="text" name="tandatangan" class="form-control" required></div>
+                <div class="mb-2"><label>Penanda Tangan</label><input type="text" name="tandatangan" class="form-control"></div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
