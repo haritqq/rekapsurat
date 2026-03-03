@@ -5,7 +5,7 @@ include 'koneksi.php';
 if (isset($_GET['act'])) {
     $act = $_GET['act'];
 
-// ==================================================== SURAT MASUK
+// ======================= SURAT MASUK ============================= 
     // TAMBAH SURAT MASUK
     if ($act == 'tambah_masuk') {
         $no = $_POST['no_surat'];
@@ -61,7 +61,7 @@ if (isset($_GET['act'])) {
 
 
 
-// ==================================================== IZIN TESTING
+// ========================= IZIN TESTING ===========================
     // TAMBAH IZIN
     elseif ($act == 'tambah_izin') {
         $nama = $_POST['nama'];
@@ -77,7 +77,7 @@ if (isset($_GET['act'])) {
         header("location:index.php?page=izin_testing");
     }
     // EDIT IZIN
-    elseif ($act == '') {
+    elseif ($act == 'edit_izin') {
         $id = $_POST['id'];
         $nama = $_POST['nama'];
         $nip = $_POST['nip'];
@@ -98,7 +98,7 @@ if (isset($_GET['act'])) {
                 WHERE id = '$id'";
 
         mysqli_query($koneksi, $query);
-        header("location:index.php?page=tugas_belajar");
+        header("location:index.php?page=izin_testing");
         }
 
     // HAPUS IZIN
@@ -156,7 +156,52 @@ if (isset($_GET['act'])) {
     }
 
 
+// ==================================================== SKMI
+    // TAMBAH SKMI
+    elseif ($act == 'tambah_skmi') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
 
+        mysqli_query($koneksi, "INSERT INTO skmi (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
+        header("location:index.php?page=skmi");
+    }
+    // EDIT SKMI
+    elseif ($act == 'edit_skmi') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        $query = "UPDATE skmi SET 
+                    nama = '$nama', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat', 
+                    asal_instansi = '$instansi', 
+                    no_sk = '$sk', 
+                    lembaga = '$lembaga',
+                    ttd = '$tandatangan'
+                WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=skmi");
+        }
+
+        // HAPUS SKMI
+    elseif ($act == 'hapus_skmi') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM skmi WHERE id = '$id'");
+        header("location:index.php?page=skmi");
+    }
         
     
     // ====================================================
