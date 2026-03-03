@@ -44,28 +44,33 @@ $keluar = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_keluar WHE
         <i class="fas fa-inbox me-2"></i> Surat Masuk
     </a>
 
-    <a href="#skeluarSubmenu" data-bs-toggle="collapse" 
-       class="dropdown-toggle <?= ($current_page == 'surat_keluar') ? 'active' : ''; ?>" 
-       aria-expanded="<?= ($current_page == 'surat_keluar') ? 'true' : 'false'; ?>">
-        <i class="fas fa-paper-plane me-2"></i> Surat Keluar
+<?php 
+$sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
+?>
+
+<a href="#skeluarSubmenu" data-bs-toggle="collapse" 
+   class="dropdown-toggle <?= in_array($current_page, $sk_pages) ? 'active' : ''; ?>" 
+   aria-expanded="<?= in_array($current_page, $sk_pages) ? 'true' : 'false'; ?>">
+    <i class="fas fa-paper-plane me-2"></i> Surat Keluar
+</a>
+
+<div class="collapse <?= in_array($current_page, $sk_pages) ? 'show' : ''; ?>" id="skeluarSubmenu" data-bs-parent=".sidebar">
+    <a href="index.php?page=izin_testing" class="ps-5 <?= ($current_page == 'izin_testing') ? 'active' : ''; ?>">
+        <i class="fas fa-angle-right me-2"></i> Izin Testing
     </a>
-    <div class="collapse <?= ($current_page == 'surat_keluar') ? 'show' : ''; ?>" id="skeluarSubmenu" data-bs-parent=".sidebar">
-        <a href="index.php?page=izin_testing" class="ps-5 <?= ($current_type == 'izin_testing') ? 'active' : ''; ?>">
-            <i class="fas fa-angle-right me-2"></i> Izin Testing
-        </a>
-        <a href="index.php?page=tugas_belajar" class="ps-5 <?= ($current_type == 'tugas_belajar') ? 'active' : ''; ?>">
-            <i class="fas fa-angle-right me-2"></i> Tugas Belajar
-        </a>
-        <a href="index.php?page=skmi" class="ps-5 <?= ($current_type == 'skmi') ? 'active' : ''; ?>">
-            <i class="fas fa-angle-right me-2"></i> SKMI
-        </a>
-        <a href="index.php?page=skmta" class="ps-5 <?= ($current_type == 'skmta') ? 'active' : ''; ?>">
-            <i class="fas fa-angle-right me-2"></i> SKMTA
-        </a>
-        <a href="index.php?page=skttb" class="ps-5 <?= ($current_type == 'skttb') ? 'active' : ''; ?>">
-            <i class="fas fa-angle-right me-2"></i> SKTTB
-        </a>
-    </div>
+    <a href="index.php?page=tugas_belajar" class="ps-5 <?= ($current_page == 'tugas_belajar') ? 'active' : ''; ?>">
+        <i class="fas fa-angle-right me-2"></i> Tugas Belajar
+    </a>
+    <a href="index.php?page=skmi" class="ps-5 <?= ($current_page == 'skmi') ? 'active' : ''; ?>">
+        <i class="fas fa-angle-right me-2"></i> SKMI
+    </a>
+    <a href="index.php?page=skmta" class="ps-5 <?= ($current_page == 'skmta') ? 'active' : ''; ?>">
+        <i class="fas fa-angle-right me-2"></i> SKMTA
+    </a>
+    <a href="index.php?page=skttb" class="ps-5 <?= ($current_page == 'skttb') ? 'active' : ''; ?>">
+        <i class="fas fa-angle-right me-2"></i> SKTTB
+    </a>
+</div>
     
     <a href="#refSubmenu" data-bs-toggle="collapse" 
        class="dropdown-toggle <?= (strpos($current_page, 'ref_') !== false) ? 'active' : ''; ?>">

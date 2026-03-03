@@ -83,7 +83,8 @@
                                 </div>
                                 <div class="mb-2">
                                     <label>Nomor WhatsApp</label>
-                                    <input type="number" name="no_wa" class="form-control" value="<?= $data['no_wa']; ?>">
+                                    <input type="number" name="no_wa" class="form-control" placeholder="Contoh: 628123456789" value="<?= $data['no_wa']; ?>">
+                                    <small class="text-danger">*Awali dengan angka 62 (Kode Negara) agar link berfungsi</small>
                                 </div>
                             </div>
                             <div class="modal-footer">
