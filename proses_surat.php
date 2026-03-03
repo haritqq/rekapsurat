@@ -251,6 +251,52 @@ if (isset($_GET['act'])) {
         header("location:index.php?page=skmta");
     }
 
+
+// ==================================================== SKTTB
+    // TAMBAH SKTTB
+    elseif ($act == 'tambah_skttb') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $tandatangan = $_POST['tandatangan'];
+
+        mysqli_query($koneksi, "INSERT INTO skttb (nama, nip, pangkat_gol, asal_instansi, no_sk, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$tandatangan')");
+        header("location:index.php?page=skttb");
+    }
+    // EDIT SKTTB
+    elseif ($act == 'edit_skttb') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $tandatangan = $_POST['tandatangan'];
+
+        $query = "UPDATE skttb SET 
+                    nama = '$nama', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat', 
+                    asal_instansi = '$instansi', 
+                    no_sk = '$sk', 
+                    ttd = '$tandatangan'
+                WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=skttb");
+        }
+
+        // HAPUS SKTTB
+    elseif ($act == 'hapus_skttb') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM skttb WHERE id = '$id'");
+        header("location:index.php?page=skttb");
+    }
+
+
     // ====================================================
     // 3. CRUD REFERENSI SURAT MASUK
     // ====================================================
