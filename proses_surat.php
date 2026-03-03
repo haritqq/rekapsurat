@@ -203,7 +203,54 @@ if (isset($_GET['act'])) {
         header("location:index.php?page=skmi");
     }
         
-    
+
+// ==================================================== SKMTA
+    // TAMBAH SKMTA
+    elseif ($act == 'tambah_skmta') {
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        mysqli_query($koneksi, "INSERT INTO skmta (nama, nip, pangkat_gol, asal_instansi, no_sk, lembaga, ttd) 
+                                VALUES ('$nama', '$nip', '$pangkat', '$instansi', '$sk', '$lembaga', '$tandatangan')");
+        header("location:index.php?page=skmta");
+    }
+    // EDIT SKMTA
+    elseif ($act == 'edit_skmta') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $nip = $_POST['nip'];
+        $pangkat = $_POST['pangkat'];
+        $instansi = $_POST['instansi'];
+        $sk = $_POST['sk'];
+        $lembaga = $_POST['lembaga'];
+        $tandatangan = $_POST['tandatangan'];
+
+        $query = "UPDATE skmta SET 
+                    nama = '$nama', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat', 
+                    asal_instansi = '$instansi', 
+                    no_sk = '$sk', 
+                    lembaga = '$lembaga',
+                    ttd = '$tandatangan'
+                WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=skmta");
+        }
+
+        // HAPUS SKMTA
+    elseif ($act == 'hapus_skmta') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM skmta WHERE id = '$id'");
+        header("location:index.php?page=skmta");
+    }
+
     // ====================================================
     // 3. CRUD REFERENSI SURAT MASUK
     // ====================================================
