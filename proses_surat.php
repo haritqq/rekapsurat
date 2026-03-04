@@ -383,6 +383,53 @@ if (isset($_GET['act'])) {
         header("location:index.php?page=ref_keluar");
     }
 
+        // TAMBAH REF ANGGOTA ===================================
+    elseif ($act == 'tambah_ref_anggota') {
+        $nama = $_POST['nama'];
+        $jabatan = $_POST['jabatan'];
+        $nip = $_POST['nip'];
+        $pangkat_gol = $_POST['pangkat_gol'];
+        $jk = $_POST['jenis_kelamin'];
+        $posisi_ruang = $_POST['posisi_ruang'];
+        $no_telp = $_POST['no_telp'];
+
+        mysqli_query($koneksi, "INSERT INTO ref_anggota (nama, jabatan, nip, pangkat_gol, jenis_kelamin, posisi_ruang, no_telp) 
+                  VALUES ('$nama', '$jabatan', '$nip', '$pangkat_gol', '$jk', '$posisi_ruang', '$no_telp')");
+        header("location:index.php?page=anggota");
+    }
+
+    // EDIT REF ANGGOTA
+    elseif ($act == 'edit_ref_anggota') {
+        $id = $_POST['id'];
+        $nama = $_POST['nama'];
+        $jabatan = $_POST['jabatan'];
+        $nip = $_POST['nip'];
+        $pangkat_gol = $_POST['pangkat_gol'];
+        $jenis_kelamin = $_POST['jenis_kelamin'];
+        $posisi_ruang = $_POST['posisi_ruang'];
+        $no_telp = $_POST['no_telp'];
+
+        $query = "UPDATE ref_anggota SET 
+                    nama = '$nama', 
+                    jabatan = '$jabatan', 
+                    nip = '$nip', 
+                    pangkat_gol = '$pangkat_gol',
+                    jenis_kelamin = '$jenis_kelamin', 
+                    posisi_ruang = '$posisi_ruang', 
+                    no_telp = '$no_telp'
+                  WHERE id = '$id'";
+
+        mysqli_query($koneksi, $query);
+        header("location:index.php?page=anggota");
+    }
+
+    // HAPUS REF ANGGOTA
+    elseif ($act == 'hapus_ref_anggota') {
+        $id = $_GET['id'];
+        mysqli_query($koneksi, "DELETE FROM ref_anggota WHERE id = '$id'");
+        header("location:index.php?page=anggota");
+    }
+
 
 }
 ?>

@@ -182,8 +182,8 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
             <a href="index.php?page=ref_keluar" class="ps-5 small <?= ($current_page == 'ref_keluar') ? 'active' : ''; ?>">No. Surat Keluar</a>
         </div>
 
-        <a href="index.php?page=ref_anggota" <?= ($current_page == 'ref_anggota') ? 'active' : ''; ?>">
-            <i class="fas fa-user-tag me-3"></i> Data Anggota
+        <a href="index.php?page=anggota" class="<?= ($current_page == 'anggota') ? 'active' : ''; ?>">
+            <i class="fas fa-user-tag me-3"></i> Data Pegawai
         </a>
 
         <a href="index.php?page=laporan" class="<?= ($current_page == 'laporan') ? 'active' : ''; ?>">
@@ -258,7 +258,7 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
     <div class="col-md-4 mb-4">
         <div class="card card-stats shadow-sm h-100" style="border-left: 5px solid #f6c23e;">
             <div class="card-body">
-                <div class="text-muted small fw-bold mb-2">DATA ANGGOTA</div>
+                <div class="text-muted small fw-bold mb-2">DATA PEGAWAI</div>
                 <div class="d-flex justify-content-between align-items-end">
                     <div>
                         <h2 class="fw-bold mb-0"><?= $anggota_total; ?></h2>
