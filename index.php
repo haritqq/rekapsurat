@@ -3,13 +3,51 @@ session_start();
 if($_SESSION['status'] != "login"){ header("location:login.php"); }
 include 'koneksi.php';
 
-// Hitung Statistik Dashboard
 $bulan_ini = date('m');
-$masuk = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_masuk WHERE MONTH(tgl_terima) = '$bulan_ini'"));
-$keluar = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM surat_keluar WHERE MONTH(tgl_surat) = '$bulan_ini'"));
+$tahun_ini = date('Y');
+
+// Fungsi pembantu agar kode lebih bersih
+function hitungData($koneksi, $tabel, $kolom_tgl, $bulan = null) {
+    $query = "SELECT COUNT(*) as total FROM $tabel";
+    if ($bulan) {
+        $query .= " WHERE MONTH($kolom_tgl) = '$bulan' AND YEAR($kolom_tgl) = '" . date('Y') . "'";
+    }
+    $res = mysqli_query($koneksi, $query);
+    $data = mysqli_fetch_assoc($res);
+    return $data['total'];
+}
+
+// 1. Surat Masuk
+$masuk_total = hitungData($koneksi, 'surat_masuk', 'tgl_terima');
+$masuk_bulan = hitungData($koneksi, 'surat_masuk', 'tgl_terima', $bulan_ini);
+
+// 2. Rincian Surat Keluar (Total & Per Bulan)
+// Asumsi semua tabel memiliki kolom 'created_at' atau ganti dengan kolom tanggal masing-masing
+$izin_total  = hitungData($koneksi, 'izin_testing', 'id'); // Ganti 'id' dengan kolom tgl jika ada
+$izin_bulan  = hitungData($koneksi, 'izin_testing', 'created_at', $bulan_ini);
+
+$tugas_total = hitungData($koneksi, 'tugas_bel', 'id');
+$tugas_bulan = hitungData($koneksi, 'tugas_bel', 'created_at', $bulan_ini);
+
+$skmi_total  = hitungData($koneksi, 'skmi', 'id');
+$skmi_bulan  = hitungData($koneksi, 'skmi', 'created_at', $bulan_ini);
+
+$skmta_total = hitungData($koneksi, 'skmta', 'id');
+$skmta_bulan = hitungData($koneksi, 'skmta', 'created_at', $bulan_ini);
+
+$skttb_total = hitungData($koneksi, 'skttb', 'id');
+$skttb_bulan = hitungData($koneksi, 'skttb', 'created_at', $bulan_ini);
+
+$total_keluar = $izin_total + $tugas_total + $skmi_total + $skmta_total + $skttb_total;
+$bulan_keluar = $izin_bulan + $tugas_bulan + $skmi_bulan + $skmta_bulan + $skttb_bulan;
+
+// 3. Anggota
+$anggota_total = hitungData($koneksi, 'ref_anggota', 'created_at');
 
 $current_page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 $sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
+// Tambahkan ini agar pengecekan menu referensi lebih fleksibel
+$is_ref_page = (strpos($current_page, 'ref_') !== false);
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +158,7 @@ $sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
             <i class="fas fa-home me-3"></i> Dashboard
         </a>
 
-        <div class="text-uppercase px-4 small fw-bold mt-3 mb-2" style="color: #4e535a; font-size: 0.7rem;">Manajemen Surat</div>
+        <div class="text-uppercase px-4 small fw-bold mt-3 mb-2" style="color: #cbcbcb; font-size: 0.7rem;">Manajemen Surat</div>
         <a href="index.php?page=surat_masuk" class="<?= ($current_page == 'surat_masuk') ? 'active' : ''; ?>">
             <i class="fas fa-download me-3"></i> Surat Masuk
         </a>
@@ -140,9 +178,13 @@ $sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
             <i class="fas fa-tags me-3"></i> Referensi
         </a>
         <div class="collapse <?= (strpos($current_page, 'ref_') !== false) ? 'show' : ''; ?> bg-black bg-opacity-10" id="refSubmenu">
-            <a href="index.php?page=ref_masuk" class="ps-5 small <?= ($current_page == 'ref_masuk') ? 'active' : ''; ?>">Kode Masuk</a>
-            <a href="index.php?page=ref_keluar" class="ps-5 small <?= ($current_page == 'ref_keluar') ? 'active' : ''; ?>">Kode Keluar</a>
+            <a href="index.php?page=ref_masuk" class="ps-5 small <?= ($current_page == 'ref_masuk') ? 'active' : ''; ?>">No. Surat Masuk</a>
+            <a href="index.php?page=ref_keluar" class="ps-5 small <?= ($current_page == 'ref_keluar') ? 'active' : ''; ?>">No. Surat Keluar</a>
         </div>
+
+        <a href="index.php?page=ref_anggota" <?= ($current_page == 'ref_anggota') ? 'active' : ''; ?>">
+            <i class="fas fa-user-tag me-3"></i> Data Anggota
+        </a>
 
         <a href="index.php?page=laporan" class="<?= ($current_page == 'laporan') ? 'active' : ''; ?>">
             <i class="fas fa-chart-line me-3"></i> Laporan
@@ -178,34 +220,83 @@ $sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
             } else {
             ?>
                 <h3 class="fw-bold mb-4">Dashboard Overview</h3>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card card-stats shadow-sm mb-4">
-                            <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="text-muted mb-1 small fw-bold">SURAT MASUK BULAN INI</p>
-                                        <h2 class="fw-bold mb-0"><?= $masuk; ?></h2>
-                                    </div>
-                                    <i class="fas fa-envelope-open-text fa-2x text-primary opacity-25"></i>
-                                </div>
-                            </div>
-                        </div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card card-stats shadow-sm h-100" style="border-left: 5px solid #4e73df;">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">SURAT KELUAR</div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div>
+                        <h2 class="fw-bold mb-0"><?= $total_keluar; ?></h2>
+                        <span class="badge bg-danger-soft text-primary" style="background: #e5ecf9;">
+                            <i class="fas fa-calendar-alt me-1"></i> Bulan ini: <?= $bulan_keluar; ?>
+                        </span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card card-stats shadow-sm mb-4" style="border-left-color: #1cc88a;">
-                            <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="text-muted mb-1 small fw-bold text-uppercase">Surat Keluar Bulan Ini</p>
-                                        <h2 class="fw-bold mb-0"><?= $keluar; ?></h2>
-                                    </div>
-                                    <i class="fas fa-paper-plane fa-2x text-success opacity-25"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <i class="fas fa-paper-plane fa-2x text-primary opacity-25"></i>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-stats shadow-sm h-100" style="border-left: 5px solid #1cc88a;">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">SURAT MASUK</div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div>
+                        <h2 class="fw-bold mb-0"><?= $masuk_total; ?></h2>
+                        <span class="badge bg-success-soft text-success" style="background: #e5f9f0;">
+                            <i class="fas fa-calendar-alt me-1"></i> Bulan ini: <?= $masuk_bulan; ?>
+                        </span>
+                    </div>
+                    <i class="fas fa-envelope-open-text fa-2x text-success opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card card-stats shadow-sm h-100" style="border-left: 5px solid #f6c23e;">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">DATA ANGGOTA</div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div>
+                        <h2 class="fw-bold mb-0"><?= $anggota_total; ?></h2>
+                        <span class="text-muted small">Total Terdaftar</span>
+                    </div>
+                    <i class="fas fa-users fa-2x text-warning opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="fw-bold mb-3 mt-2 text-muted">Rincian Surat Keluar</h5>
+<div class="row">
+    <?php
+    $menus = [
+        ['label' => 'Izin Testing', 'total' => $izin_total, 'bulan' => $izin_bulan, 'color' => '#4e73df'],
+        ['label' => 'Tugas Belajar', 'total' => $tugas_total, 'bulan' => $tugas_bulan, 'color' => '#36b9cc'],
+        ['label' => 'SKMI', 'total' => $skmi_total, 'bulan' => $skmi_bulan, 'color' => '#6610f2'],
+        ['label' => 'SKMTA', 'total' => $skmta_total, 'bulan' => $skmta_bulan, 'color' => '#e83e8c'],
+        ['label' => 'SKTTB', 'total' => $skttb_total, 'bulan' => $skttb_bulan, 'color' => '#fd7e14'],
+    ];
+
+    foreach ($menus as $m) : ?>
+    <div class="col-md-4 col-lg-2-4 mb-3" style="flex: 0 0 auto; width: 20%;"> <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-3 text-center">
+                <div class="small text-muted fw-bold mb-1 text-uppercase" style="font-size: 0.7rem;"><?= $m['label']; ?></div>
+                <h3 class="fw-bold mb-1" style="color: <?= $m['color']; ?>;"><?= $m['total']; ?></h3>
+                <hr class="my-2 opacity-10">
+                <div class="small">
+                    <span class="text-muted">Bulan ini:</span> 
+                    <span class="fw-bold"><?= $m['bulan']; ?></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
             <?php } ?>
         </div>
     </div>

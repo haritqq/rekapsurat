@@ -4,15 +4,15 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between">
-        <h5>Kode Surat Keluar</h5>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi Keluar</button>
+        <h5>Nomor Surat Keluar</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi</button>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>No Surat</th>
+                    <th>Kode Surat</th>
                     <th>Tujuan</th>
                     <th>Instansi</th>
                     <th>Pengirim</th>
@@ -60,10 +60,6 @@
                                         <label>Instansi</label>
                                         <input type="text" name="instansi" class="form-control" value="<?= $data['instansi']; ?>" required>
                                     </div>
-                                    <!-- <div class="mb-2">
-                                        <label>Tujuan</label>
-                                        <input type="text" name="tujuan" class="form-control" value="<?= $data['tujuan']; ?>" required>
-                                    </div> -->
                                     <div class="mb-2">
                                         <label>Pengirim</label>
                                         <input type="text" name="pengirim" class="form-control" value="<?= $data['pengirim']; ?>" required>

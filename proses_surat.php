@@ -353,7 +353,7 @@ if (isset($_GET['act'])) {
         $pengirim = $_POST['pengirim'];
 
         mysqli_query($koneksi, "INSERT INTO ref_keluar (no_surat, tujuan, instansi, pengirim) 
-                  VALUES ('$no_surat', '$tujuan' '$instansi', '$pengirim')");
+                  VALUES ('$no_surat', '$tujuan', '$instansi', '$pengirim')");
         header("location:index.php?page=ref_keluar");
     }
 

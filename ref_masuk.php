@@ -1,18 +1,18 @@
     <header class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 shadow-sm rounded">
-        <h4 class="mb-0">Surat Keluar</h4><div><span>Halo, Admin!</span></div>
+        <h4 class="mb-0">Surat Masuk</h4><div><span>Halo, Admin!</span></div>
     </header>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between">
-        <h5>Kode Surat Masuk</h5>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi Masuk</button>
+        <h5>Nomor Surat Masuk</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Referensi</button>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Kode Masuk</th>
+                    <th>Kode Surat</th>
                     <th>Nama Instansi</th>
                     <th>Perihal</th>
                     <th>Tujuan</th>
