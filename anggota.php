@@ -81,9 +81,19 @@
                                         <label>Posisi Ruang</label>
                                         <input type="text" name="posisi_ruang" class="form-control" value="<?= $data['posisi_ruang']; ?>" required>
                                     </div>
-                                    <div class="mb-2">
-                                        <label>Pengirim</label>
-                                        <input type="text" name="no_telp" class="form-control" value="<?= $data['no_telp']; ?>" required>
+                                    <div class="mb-3">
+                                        <label>No. WhatsApp</label>
+                                        <br>
+                                        <input type="tel" class="form-control phone-edit" 
+                                            value="<?= $data['no_telp']; ?>" 
+                                            style="width: 100%;" required>
+                                        
+                                        <input type="hidden" name="no_telp" class="full-no-edit" 
+                                            value="<?= $data['no_telp']; ?>">
+                                        
+                                        <div class="text-danger small mt-1 error-msg-edit" style="display:none;">
+                                            Nomor tidak valid
+                                        </div>
                                     </div>
                             </div>
                             <div class="modal-footer">
@@ -122,7 +132,15 @@
                     </select>
                 </div>
                 <div class="mb-2"><label>Posisi Ruang</label><input type="text" name="posisi_ruang" class="form-control" required></div>
-                <div class="mb-2"><label>No. Hp</label><input type="text" name="no_telp" class="form-control" required></div>
+                <div class="mb-3">
+                    <label for="phone">Nomor WhatsApp</label>
+                    <br>
+                    <input type="tel" id="phone" class="form-control" placeholder="81234567890" style="width: 100%;">
+                    
+                    <input type="hidden" name="no_telp" id="full_no_wa" value="">
+                    
+                    <div id="error-msg" class="text-danger small mt-1" style="display:none;">Nomor tidak valid</div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>

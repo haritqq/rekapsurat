@@ -10,7 +10,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
-                <thead>
+                <thead style="text-align: center; vertical-align: middle;">
                     <tr>
                         <th>No</th>
                         <th>No Surat</th>
@@ -78,13 +78,25 @@
                                 <hr>
                                 <h6>Disposisi & Teruskan</h6>
                                 <div class="mb-2">
-                                    <label>Diteruskan Kepada</label>
-                                    <input type="text" name="diteruskan_kepada" class="form-control" value="<?= $data['diteruskan_kepada']; ?>">
+                                    <label>Diteruskan Kepada (Nama Pegawai)</label>
+                                    <select name="diteruskan_kepada" id="edit_pilih_pegawai" class="form-select">
+                                        <option value="">-- Pilih Pegawai --</option>
+                                        <?php
+                                        // Ambil data dari tabel ref_anggota
+                                        $sql_anggota = mysqli_query($koneksi, "SELECT nama, no_telp FROM ref_anggota ORDER BY nama ASC");
+                                        while($row = mysqli_fetch_array($sql_anggota)){
+                                            // Cek apakah nama ini adalah yang sebelumnya dipilih
+                                            $selected = ($row['nama'] == $data['diteruskan_kepada']) ? 'selected' : '';
+                                            
+                                            echo "<option value='".$row['nama']."' data-wa='".$row['no_telp']."' $selected>".$row['nama']."</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="mb-2">
                                     <label>Nomor WhatsApp</label>
-                                    <input type="number" name="no_wa" class="form-control" placeholder="Contoh: 628123456789" value="<?= $data['no_wa']; ?>">
-                                    <small class="text-danger">*Awali dengan angka 62 (Kode Negara) agar link berfungsi</small>
+                                    <input type="number" name="no_wa" id="edit_no_wa" class="form-control" value="<?= $data['no_wa']; ?>" readonly>
+                                    <small class="text-danger">*Nomor akan terupdate otomatis saat nama pegawai diganti</small>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -120,12 +132,23 @@
                 <h6>Disposisi & Teruskan</h6>
                 <div class="mb-2">
                     <label>Diteruskan Kepada (Nama Pegawai)</label>
-                    <input type="text" name="diteruskan_kepada" class="form-control" placeholder="Opsional">
+                    <select name="diteruskan_kepada" id="pilih_pegawai" class="form-select">
+                        <option value="">-- Pilih Pegawai (Opsional) --</option>
+                        <?php
+                        // Ambil data nama dan no_telp dari tabel ref_anggota
+                        $sql_anggota = mysqli_query($koneksi, "SELECT nama, no_telp FROM ref_anggota ORDER BY nama ASC");
+                        while($row = mysqli_fetch_array($sql_anggota)){
+                            // Simpan nomor telepon di atribut data-wa
+                            echo "<option value='".$row['nama']."' data-wa='".$row['no_telp']."'>".$row['nama']."</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
+
                 <div class="mb-2">
                     <label>Nomor WhatsApp</label>
-                    <input type="number" name="no_wa" class="form-control" placeholder="Contoh: 628123456789">
-                    <small class="text-danger">*Awali dengan angka 62 (Kode Negara) agar link berfungsi</small>
+                    <input type="number" name="no_wa" id="no_wa" class="form-control" placeholder="Otomatis terisi" readonly>
+                    <small class="text-danger">*Nomor otomatis muncul berdasarkan data anggota yang dipilih</small>
                 </div>
             </div>
             <div class="modal-footer">

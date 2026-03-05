@@ -46,7 +46,7 @@ $anggota_total = hitungData($koneksi, 'ref_anggota', 'created_at');
 
 $current_page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 $sk_pages = ['izin_testing', 'tugas_belajar', 'skmi', 'skmta', 'skttb'];
-// Tambahkan ini agar pengecekan menu referensi lebih fleksibel
+// pengecekan menu referensi lebih fleksibel
 $is_ref_page = (strpos($current_page, 'ref_') !== false);
 ?>
 
@@ -58,6 +58,8 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <style>
         :root {
             --primary-color: #4e73df;
@@ -326,6 +328,120 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
             });
         });
     });
+</script>
+
+<!-- script tambah data di menu data pegawai -->
+<script>
+const input = document.querySelector("#phone");
+const hiddenInput = document.querySelector("#full_no_wa");
+const errorMsg = document.querySelector("#error-msg");
+
+const iti = window.intlTelInput(input, {
+    // Pengaturan
+    initialCountry: "id", // Default Indonesia
+    separateDialCode: true, // Menampilkan angka +62 di sebelah bendera
+    preferredCountries: ["id", "my", "sg"], // Negara prioritas di daftar atas
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js", // Untuk validasi
+});
+
+// Fungsi untuk memperbarui hidden input setiap kali nomor berubah
+const updateValue = () => {
+    if (input.value.trim()) {
+        if (iti.isValidNumber()) {
+            // iti.getNumber() menghasilkan format internasional seperti +62812...
+            // hapus tanda "+" agar sesuai dengan kebutuhan database
+            const cleanNumber = iti.getNumber().replace('+', '');
+            hiddenInput.value = cleanNumber;
+            errorMsg.style.display = "none";
+        } else {
+            errorMsg.style.display = "block";
+        }
+    }
+};
+
+input.addEventListener('keyup', updateValue);
+input.addEventListener('change', updateValue);
+input.addEventListener('countrychange', updateValue);
+</script>
+
+<!-- Script edit nomor whatapp -->
+<script>
+    // Ambil semua elemen input dengan class phone-edit
+const editInputs = document.querySelectorAll(".phone-edit");
+
+editInputs.forEach(function(input) {
+    // Cari elemen pendukung (hidden input & error msg) di dalam parent yang sama
+    const container = input.closest('.mb-3');
+    const hiddenInput = container.querySelector(".full-no-edit");
+    const errorMsg = container.querySelector(".error-msg-edit");
+
+    const itiEdit = window.intlTelInput(input, {
+        initialCountry: "id",
+        separateDialCode: true,
+        preferredCountries: ["id", "my", "sg"],
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+    });
+
+    // Fungsi update nilai
+    const handleChange = () => {
+        if (input.value.trim()) {
+            if (itiEdit.isValidNumber()) {
+                // Simpan nomor bersih (tanpa +) ke hidden input
+                const cleanNumber = itiEdit.getNumber().replace('+', '');
+                hiddenInput.value = cleanNumber;
+                errorMsg.style.display = "none";
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+    };
+
+    // Event listener untuk setiap perubahan
+    input.addEventListener('keyup', handleChange);
+    input.addEventListener('change', handleChange);
+    input.addEventListener('countrychange', handleChange);
+});
+</script>
+
+<!-- scrip dropdown pegawai pada menu surat masuk -->
+<script>
+    const selectPegawai = document.getElementById('pilih_pegawai');
+    const inputWa = document.getElementById('no_wa');
+
+    selectPegawai.addEventListener('change', function() {
+        // Mengambil atribut data-wa dari opsi yang dipilih
+        const selectedOption = this.options[this.selectedIndex];
+        const noWa = selectedOption.getAttribute('data-wa');
+
+        // Isi input no_wa jika data tersedia, jika tidak kosongkan
+        if (noWa) {
+            inputWa.value = noWa;
+        } else {
+            inputWa.value = '';
+        }
+    });
+</script>
+
+<!-- scrip edit pegawai pada surat masuk -->
+<script>
+// Menggunakan event delegation agar bekerja di dalam modal atau elemen dinamis
+document.addEventListener('change', function (e) {
+    if (e.target && e.target.id === 'edit_pilih_pegawai') {
+        const select = e.target;
+        const selectedOption = select.options[select.selectedIndex];
+        const noWa = selectedOption.getAttribute('data-wa');
+        
+        // Cari input no_wa yang berada dalam satu container modal yang sama
+        const modalBody = select.closest('.modal-body');
+        const inputWa = modalBody.querySelector('#edit_no_wa');
+        
+        if (noWa) {
+            inputWa.value = noWa;
+        } else {
+            inputWa.value = '';
+        }
+    }
+});
 </script>
 </body>
 </html>
