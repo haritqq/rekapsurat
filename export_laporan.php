@@ -37,50 +37,50 @@ $kolom = "no_surat, tgl_msk_bidang, tgl_terima, pengirim, perihal, no_agenda, di
 // 3. Logic Query Database
 $col_date = 'tgl_terima'; 
 
+// 3. Logic Query Database
 if ($jenis == 'masuk') {
-    // Surat Masuk (Kolom asli)
-    $sql = "SELECT no_surat, tgl_msk_bidang, tgl_terima, pengirim, perihal, no_agenda, diteruskan_kepada 
+    $judul_laporan = "LAPORAN SURAT MASUK";
+    $sql = "SELECT 
+                no_surat, 
+                tgl_terima AS tgl_dokumen,
+                tgl_msk_bidang, 
+                pengirim, 
+                perihal, 
+                no_agenda, 
+                diteruskan_kepada 
             FROM surat_masuk 
-            WHERE $col_date BETWEEN '$start_date' AND '$end_date' 
-            ORDER BY $col_date ASC";
+            WHERE tgl_terima BETWEEN '$start_date' AND '$end_date' 
+            ORDER BY tgl_terima ASC";
 } else {
-    // Surat Keluar: Kita petakan kolom yang ada agar cocok dengan tabel laporan
-    // Contoh: no_sk dianggap sebagai no_surat, nama dianggap pengirim, dst.
-    $tables = ['izin_testing', 'tugas_bel', 'skmi', 'skmta', 'skttb'];
-    $query_parts = [];
+    $judul_laporan = "LAPORAN SURAT KELUAR";
+    $tables = [
+        'izin_testing' => 'Izin Testing',
+        'tugas_bel'    => 'Tugas Belajar',
+        'skmi'         => 'SKMI',
+        'skmta'        => 'SKMTA',
+        'skttb'        => 'SKTTB'
+    ];
     
-    foreach ($tables as $tbl) {
-        // Kita gunakan AS untuk menyamakan nama kolom
-        // Karena tabel ini tidak punya tgl_terima, kita gunakan created_at sebagai pengganti filter
+    $query_parts = [];
+    foreach ($tables as $table_name => $label) {
+        $lembaga_col = ($table_name == 'skttb') ? "'-'" : "lembaga";
         $query_parts[] = "SELECT 
+                            '$label' AS jenis_surat,
                             no_sk AS no_surat, 
-                            DATE(created_at) AS tgl_msk_bidang, 
-                            DATE(created_at) AS tgl_terima, 
+                            DATE(created_at) AS tgl_dokumen, 
                             nama AS pengirim, 
-                            CONCAT('Lembaga: ', lembaga) AS perihal, 
+                            $lembaga_col AS perihal, 
                             '-' AS no_agenda, 
                             ttd AS diteruskan_kepada 
-                          FROM $tbl 
+                          FROM $table_name 
                           WHERE DATE(created_at) BETWEEN '$start_date' AND '$end_date'";
     }
-    
-    // Khusus skttb (karena tidak ada kolom 'lembaga' di SQL Anda)
-    $query_parts[4] = "SELECT 
-                            no_sk AS no_surat, 
-                            DATE(created_at) AS tgl_msk_bidang, 
-                            DATE(created_at) AS tgl_terima, 
-                            nama AS pengirim, 
-                            'SKTTB' AS perihal, 
-                            '-' AS no_agenda, 
-                            ttd AS diteruskan_kepada 
-                          FROM skttb 
-                          WHERE DATE(created_at) BETWEEN '$start_date' AND '$end_date'";
-
-    $sql = implode(" UNION ALL ", $query_parts) . " ORDER BY tgl_terima ASC";
+    $sql = implode(" UNION ALL ", $query_parts) . " ORDER BY tgl_dokumen ASC";
 }
-
 $query = mysqli_query($koneksi, $sql);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -110,41 +110,56 @@ $query = mysqli_query($koneksi, $sql);
 <body>
 
     <div class="header-laporan">
-        <h2>LAPORAN SURAT <?= strtoupper($jenis) ?></h2>
+        <h2><?= strtoupper($judul_laporan) ?></h2>
         <h4>Periode: <?= tgl_indo($start_date) ?> s/d <?= tgl_indo($end_date) ?></h4>
     </div>
 
     <table class="table-data">
         <thead>
             <tr>
-                <th width="4%">No</th>
-                <th width="14%">No Surat</th>
-                <th width="12%">Tgl Msk Bidang</th>
-                <th width="12%">Tgl Terima</th>
-                <th width="15%">Pengirim</th>
-                <th width="20%">Perihal</th>
-                <th width="10%">No Agenda</th>
-                <th width="13%">Diteruskan Kpd</th>
+                <th width="3%">No</th> 
+                <?php if ($jenis == 'keluar'): ?>
+                    <th width="10%">Jenis Surat</th>                                               
+                <?php endif; ?>
+                
+                <th><?= ($jenis == 'masuk') ? 'No. Surat' : 'No. SK'; ?></th>                    
+                <th width="12%"><?= ($jenis == 'masuk') ? 'Tgl Terima' : 'Tgl Cetak Surat'; ?></th> 
+                <?php if ($jenis == 'masuk'): ?>
+                <th width="10%">Tgl Msk Bidang</th>
+                <?php endif; ?>                                                
+                <th><?= ($jenis == 'masuk') ? 'Pengirim / Instansi' : 'Nama Pegawai'; ?></th>     
+                <th><?= ($jenis == 'masuk') ? 'Perihal' : 'Lembaga / Tujuan'; ?></th>             
+                <th><?= ($jenis == 'masuk') ? 'Diteruskan Kpd' : 'Tanda Tangan'; ?></th>         
             </tr>
         </thead>
         <tbody>
             <?php
             if(mysqli_num_rows($query) > 0){
                 $no = 1;
-                while($row = mysqli_fetch_assoc($query)){
-                    echo "<tr>
-                            <td style='text-align:center;'>".$no++."</td>
-                            <td>".$row['no_surat']."</td>
-                            <td style='text-align:center;'>".tgl_indo($row['tgl_msk_bidang'])."</td>
-                            <td style='text-align:center;'>".tgl_indo($row['tgl_terima'])."</td>
-                            <td>".$row['pengirim']."</td>
-                            <td>".$row['perihal']."</td>
-                            <td style='text-align:center;'>".$row['no_agenda']."</td>
-                            <td>".$row['diteruskan_kepada']."</td>
-                          </tr>";
-                }
+                while($row = mysqli_fetch_assoc($query)){ ?>
+                    <tr>
+                        <td style="text-align:center;"><?= $no++; ?></td>
+                        
+                        <?php if ($jenis == 'keluar'): ?>
+                            <td style="text-align:center;"><b><?= $row['jenis_surat']; ?></b></td>
+                        <?php endif; ?>
+
+                        <td><?= $row['no_surat']; ?></td>                                          
+                        <td style="text-align:center;"><?= tgl_indo($row['tgl_dokumen']); ?></td>  
+                        <?php if ($jenis == 'masuk'): ?>
+                        <td><?= tgl_indo($row['tgl_msk_bidang']); ?></td>
+                        <?php endif; ?>
+                        <td><?= $row['pengirim']; ?></td>                                           
+                        <td><?= $row['perihal']; ?></td>                                            
+                                                                                                    <!--6 -->
+                        <!-- <td style="text-align:center;"><?= $row['no_agenda']; ?></td>                -->
+                        
+                        <td><?= $row['diteruskan_kepada']; ?></td>                                  <!--7 -->
+                    </tr>
+                <?php }
             } else {
-                echo "<tr><td colspan='8' style='text-align:center;'>Tidak ada data surat pada periode tersebut.</td></tr>";
+                $colspan = ($jenis == 'keluar') ? 8 : 7;
+                echo "<tr><td colspan='$colspan' style='text-align:center;'>Tidak ada data pada periode tersebut.</td></tr>";
             }
             ?>
         </tbody>
