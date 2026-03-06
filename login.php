@@ -11,6 +11,7 @@ if(isset($_POST['login'])){
         $data = mysqli_fetch_assoc($cek);
         $_SESSION['status'] = "login";
         $_SESSION['nama'] = $data['nama']; // Opsional: simpan nama user
+        $_SESSION['username'] = $data['username'];
         header("location:index.php");
     } else {
         $error = "Username atau password salah!";

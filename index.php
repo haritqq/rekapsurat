@@ -3,6 +3,25 @@ session_start();
 if($_SESSION['status'] != "login"){ header("location:login.php"); }
 include 'koneksi.php';
 
+// Ambil username dari session
+$user_logged = $_SESSION['username'] ?? ''; // Gunakan null coalescing agar tidak error jika kosong
+
+// Ambil data lengkap user
+$query_user  = mysqli_query($koneksi, "SELECT * FROM users WHERE username='$user_logged'");
+$user_data   = mysqli_fetch_assoc($query_user);
+
+// CEK: Jika user_data null (karena query gagal atau user tidak ditemukan)
+if (!$user_data) {
+    $user_data = [
+        'id' => '', 
+        'username' => '', 
+        'nama_lengkap' => 'User', // Gunakan nama_lengkap sesuai DB
+        'nip' => '-', 
+        'jabatan' => '-', 
+        'pangkat_gol' => '-'
+    ];
+}
+
 $bulan_ini = date('m');
 $tahun_ini = date('Y');
 
@@ -204,8 +223,23 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
                     <i class="fas fa-align-left"></i>
                 </button>
                 <div class="ms-auto d-flex align-items-center">
-                    <span class="me-3 text-muted small d-none d-md-block">Halo, <strong>Admin</strong></span>
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=4e73df&color=fff" class="rounded-circle" width="35" alt="Profile">
+                    <div class="d-flex flex-column align-items-end me-3">
+                        <span class="text-muted small d-none d-md-block">
+                            Selamat Datang, <strong><?= htmlspecialchars($user_data['nama_lengkap']); ?></strong>
+                        </span>
+                        
+                        <span id="status-badge" class="badge rounded-pill px-2 py-1 bg-success" style="font-size: 10px; min-width: 60px;">
+                            <i class="fas fa-circle me-1" style="font-size: 7px;"></i> 
+                            <span id="status-text">Online</span>
+                        </span>
+                    </div>
+
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalProfil">
+                        <img src="https://ui-avatars.com/api/?name=<?= urlencode($user_data['nama_lengkap']); ?>&background=4e73df&color=fff" 
+                            class="rounded-circle shadow-sm" 
+                            width="40" 
+                            alt="Profile">
+                    </a>
                 </div>
             </div>
         </nav>
@@ -300,6 +334,70 @@ $is_ref_page = (strpos($current_page, 'ref_') !== false);
     <?php endforeach; ?>
 </div>
             <?php } ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalProfil" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-cog me-2"></i>Pengaturan Profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="proses_profil.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_user" value="<?= $user_data['id']; ?>">
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nama Lengkap</label>
+                        <input type="text" name="nama" class="form-control" value="<?= $user_data['nama_lengkap']; ?>" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">NIP</label>
+                            <input type="text" name="nip" class="form-control" value="<?= $user_data['nip'] ?? '-'; ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">Jabatan</label>
+                            <input type="text" name="jabatan" class="form-control" value="<?= $user_data['jabatan'] ?? '-'; ?>">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Pangkat / Golongan</label>
+                        <input type="text" name="pangkat_gol" class="form-control" value="<?= $user_data['pangkat_gol'] ?? '-'; ?>">
+                    </div>
+                    
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Username Baru</label>
+                        <input type="text" name="username" class="form-control" value="<?= $user_data['username']; ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Password Baru</label>
+                        <div class="input-group">
+                            <input type="password" name="password" id="pass_baru" class="form-control" placeholder="Kosongkan jika tidak ubah">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('pass_baru', 'icon_baru')">
+                                <i class="fas fa-eye" id="icon_baru"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Ulangi Password Baru</label>
+                        <div class="input-group">
+                            <input type="password" id="pass_konfirmasi" class="form-control" placeholder="Ketik ulang password">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('pass_konfirmasi', 'icon_konf')">
+                                <i class="fas fa-eye" id="icon_konf"></i>
+                            </button>
+                        </div>
+                        <div id="msg_error" class="text-danger small mt-1" style="display:none;">Password tidak cocok!</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" name="update_profil" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -443,5 +541,75 @@ document.addEventListener('change', function (e) {
     }
 });
 </script>
+
+<script>
+    function updateOnlineStatus() {
+        const badge = document.getElementById('status-badge');
+        const text = document.getElementById('status-text');
+        
+        if (navigator.onLine) {
+            // Gaya saat Online
+            badge.classList.remove('bg-danger');
+            badge.classList.add('bg-success');
+            text.textContent = "Online";
+            badge.style.opacity = "1";
+        } else {
+            // Gaya saat Offline
+            badge.classList.remove('bg-success');
+            badge.classList.add('bg-danger');
+            text.textContent = "Offline";
+            // Memberi efek kedip sedikit agar user sadar koneksi terputus
+            badge.style.opacity = "0.8"; 
+        }
+    }
+
+    // Jalankan saat halaman pertama kali dimuat
+    window.addEventListener('load', updateOnlineStatus);
+
+    // Pantau perubahan koneksi secara real-time
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+</script>
+
+<script>
+// Fungsi untuk Lihat/Sembunyi Password
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
+// Validasi Password Cocok
+const passBaru = document.getElementById('pass_baru');
+const passKonf = document.getElementById('pass_konfirmasi');
+const msgError = document.getElementById('msg_error');
+const btnSimpan = document.querySelector('button[name="update_profil"]');
+
+function cekKesesuaian() {
+    if (passKonf.value === "") {
+        msgError.style.display = "none";
+        btnSimpan.disabled = false;
+    } else if (passBaru.value !== passKonf.value) {
+        msgError.style.display = "block";
+        btnSimpan.disabled = true; // Tombol simpan mati jika tidak cocok
+    } else {
+        msgError.style.display = "none";
+        btnSimpan.disabled = false;
+    }
+}
+
+passBaru.addEventListener('keyup', cekKesesuaian);
+passKonf.addEventListener('keyup', cekKesesuaian);
+</script>
+
 </body>
 </html>
